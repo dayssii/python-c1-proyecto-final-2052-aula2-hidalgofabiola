@@ -1,0 +1,10 @@
+tipo,nombre,especialidad,telefono,username,password,direccion
+doctor,Dra. Ursula Iguaran, Ortodoncia,,dr.iguaran,pass.123,
+doctor,Dr. José Arcadio Buendia, Endodoncia,,dr.buendia,pass.123,
+doctor,Dra. Pilar Ternera, Peridoncia,,dr.ternera,pass.123,
+paciente,Petra Cotes,,612345678,petra.cotes,pass.123,
+paciente,Aureliano Babilonia,,687654321,aureliano.babilonia,pass.123,
+paciente,Pietro Crespi,,632165478,pietro.crespi,pass.123,
+centro,Clínica Dental Macondo,,,,,Avenida Colombia 1 Macondo
+centro, Clínica Dental Manaure,,,,,Calle Remedios 2 Macondo
+centro, Clínica Dental Aguilar,,,,,Plaza Mayor 3 Macondo
