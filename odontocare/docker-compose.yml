@@ -1,0 +1,45 @@
+version: "3.9"
+
+# Definimos los dos microservicios que forman el sistema OdontoCare
+services:
+  # Microservicio 1: gestiona usuarios, doctores, pacientes y centros médicos
+  service_admin:
+    # construye la imagen desde el Dockerfile de service_admin
+    build: ./service_admin 
+    container_name: odontocare_admin
+    # expone el puerto 5000 al exterior
+    ports:
+      - "5000:5000" 
+    environment:
+      # clave para firmar los token JWT
+      - SECRET_KEY=odontocare-secret-key-2026-jwt-ok 
+      # base de datos propia del servicio
+      - DATABASE_URL=sqlite:///db_admin.sqlite 
+    # mantiene la base de datos aunque el contenedor se reinicie 
+    volumes:
+      - admin_data:/app/instance 
+
+  # Microservicio 2: gestiona las citas médicas
+  # se comunica con service_admin mediante REST para validar datos
+  service_citas:
+    build: ./service_citas
+    container_name: odontocare_citas
+    # expone al puerto 5001 al exterior
+    ports:
+      - "5001:5001" 
+    environment:
+      # base de datos propia e independiente
+      - DATABASE_URL=sqlite:///db_citas.sqlite
+      # URL interna para comunicarse con service_admin mediante REST
+      - ADMIN_SERVICE_URL=http://service_admin:5000
+    # mantiene la base de datos aunque el contenedor se reinicie
+    volumes:
+      - citas_data:/app/instance 
+    # espera a que service_admin arranque primero
+    depends_on:
+      - service_admin 
+
+# Volúmenes para mantener los datos de las bases de datos
+volumes:
+  admin_data:
+  citas_data:
