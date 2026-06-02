@@ -80,6 +80,33 @@ def login():
     token = generate_token(user)
     return jsonify({"token": token, "rol": user.rol, "username": user.username}), 200
 
+@auth_bp.route("/registro", methods=["POST"])
+def registro():
+    """Registro de nuevos usuarios en el sistema."""
+    data = request.get_json()
+
+    # comprobamos campos obligatorios
+    if not data or not data.get("username") or not data.get("password") or not data.get("rol"):
+        return jsonify({"error": "username, password y rol son requeridos"}), 400
+
+    # validamos que el rol sea válido
+    roles_validos = ["admin", "medico", "secretaria", "paciente"]
+    if data["rol"] not in roles_validos:
+        return jsonify({"error": f"Rol inválido. Roles permitidos: {roles_validos}"}), 400
+
+    # comprobamos que el username no exista ya
+    if Usuario.query.filter_by(username=data["username"]).first():
+        return jsonify({"error": "El username ya existe"}), 409
+
+    # creamos el usuario con la contraseña encriptada
+    user = Usuario(
+        username=data["username"],
+        password=generate_password_hash(data["password"]),
+        rol=data["rol"],
+    )
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({"mensaje": "Usuario registrado correctamente", "usuario": user.to_dict()}), 201
 
 @auth_bp.route("/verificar", methods=["GET"]) # comprueba si un token es válido, lo usará el servicio de citas internamente
 @token_required

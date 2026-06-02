@@ -192,3 +192,19 @@ Cancela una cita existente.
 **URL:** http://localhost:5001/citas/1  
 **Headers:** Authorization: Bearer <token>  
 **Body:** ninguno
+
+---
+
+### POST /auth/registro
+Registra un nuevo usuario en el sistema.
+
+**URL:** http://localhost:5000/auth/registro  
+**Headers:** ninguno  
+**Body:**
+```json
+{
+    "username": "nueva.secretaria",
+    "password": "pass.123",
+    "rol": "secretaria"
+}
+```
